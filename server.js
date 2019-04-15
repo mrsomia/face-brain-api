@@ -1,8 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const cors = require('cors');
+
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 // Temp database to use for testing in postman
 const database = {
@@ -11,6 +15,7 @@ const database = {
 		id: 123,
 		name: 'John',
 		email: 'john@gmail.com',
+		password: 'cookies',
 		entries: 0,
 		joined: new Date()
 	},
@@ -18,6 +23,7 @@ const database = {
 		id: 124,
 		name: 'Sally',
 		email: 'Sally@gmail.com',
+		password: ' bananas',
 		entries: 0,
 		joined: new Date()
 	}
@@ -69,6 +75,7 @@ app.get('/profile/:id', (req, res) => {
 	if (!found) {
 		res.status(400).json('not found');
 	}
+})
 
 app.put('/image', (req, res) => {
 	const { id } = req.body;
