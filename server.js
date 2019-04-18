@@ -14,43 +14,10 @@ const db = knex({
 	}
   });
 
-
-// db.select('*').from('users')
-//   .then(console.log);
-
 const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
-
-// Temp database to use for testing in postman
-/* const database = {
-	users : [
-	{
-		id: 123,
-		name: 'John',
-		email: 'john@gmail.com',
-		password: 'cookies',
-		entries: 0,
-		joined: new Date()
-	},
-	{
-		id: 124,
-		name: 'Sally',
-		email: 'Sally@gmail.com',
-		password: ' bananas',
-		entries: 0,
-		joined: new Date()
-	}
-	],
-	login : [
-		{
-			id: 987,
-			hash: '',
-			email: 'john@gmail.com'
-		}
-	]
-} */
 
 app.get('/', (req, res) => {
 	res.json(database);
