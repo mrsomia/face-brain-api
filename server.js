@@ -24,12 +24,19 @@ app.get('/', (req, res) => {
 })
 
 app.post('/signin', (req, res) => {
-	if (req.body.email === database.users[0].email &&
-		req.body.password === database.users[0].password) {
-			res.json(database.users[0]);
-	} else {
-		res.json('error logging in!!');
-	}
+	const {email, password} = req.body;
+	db.select('*').from('login').where({email})
+		.then(data => {
+			const isValid = bcrypt.compareSync(password, data[0].hash);
+			if (isValid) {
+				return db.select('*').from('users').where({email})
+					.then(user => res.json(user[0]))
+					.catch(err => res.status(400).json('unable to return user'));
+			} else {
+				res.status(400).json('Email and Password do not match');
+			}
+		})
+		.catch(err => res.json(400).json('Email and Password do not match'));
 })
 
 app.post('/register', (req, res) => {
