@@ -2,6 +2,21 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const knex = require('knex');
+
+const db = knex({
+	client: 'pg',
+	connection: {
+	  host : '127.0.0.1',
+	  user : 'sachinsomia',
+	  password : '',
+	  database : 'smart-brain'
+	}
+  });
+
+
+// db.select('*').from('users')
+//   .then(console.log);
 
 const app = express();
 
@@ -9,7 +24,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Temp database to use for testing in postman
-const database = {
+/* const database = {
 	users : [
 	{
 		id: 123,
@@ -35,7 +50,7 @@ const database = {
 			email: 'john@gmail.com'
 		}
 	]
-}
+} */
 
 app.get('/', (req, res) => {
 	res.json(database);
@@ -52,29 +67,28 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
 	const {email, name, password } = req.body
-	database.users.push({
-		id: 125,
-		name: name,
-		email: email,
-		entries: 0,
-		joined: new Date()
-	})
-	res.json(database.users[database.users.length -1])
+	db('users')
+		.returning('*')
+		.insert({
+			name: name,
+			email: email,
+			joined: new Date()})
+			.then(user => res.json(user[0]))
+			.catch(err => res.status(400).json('Could not register'));
 })
 
 app.get('/profile/:id', (req, res) => {
-	const { id } = req.params;
-	let found = false;
-	database.users.forEach(user =>{
-		if (user.id === Number(id)) {
-			found = true;
-			return res.json(user);
-		}
-	})
-	if (!found) {
-		res.status(400).json('not found');
-	}
-})
+	const {id} = req.params;
+	db.select('*').from('users').where({id})
+		.then(user => {
+			if (user.length) {
+				res.json(user[0]);
+			} else {
+				res.status(400).json('User not found');
+			}
+		})
+		.catch(err => res.status(400).json('error getting user'))
+});
 
 app.put('/image', (req, res) => {
 	const { id } = req.body;
