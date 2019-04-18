@@ -106,12 +106,3 @@ app.put('/image', (req, res) => {
 })
 
 app.listen(3000, () => console.log('The server is listening on port 3000...'));
-
-/*
-/ --> res = this is working
-/signin => POST json => res = success/fail
-/register => POST => add to database --> return new user object
-/profile/:userid --> GET  = user of :userid
-/image --> PUT --> (just to update user object with one more image search)
-
-*/
