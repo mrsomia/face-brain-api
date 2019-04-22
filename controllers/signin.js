@@ -11,7 +11,7 @@ const handleSignin = (db, bcrypt) => (req, res) => {
 				res.status(400).json('Email and Password do not match');
 			}
 		})
-		.catch(err => res.json(400).json('Email and Password do not match'));
+		.catch(err => res.status(400).json('Email and Password do not match'));
 }
 
 module.exports ={
