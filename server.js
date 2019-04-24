@@ -5,7 +5,7 @@ const cors = require('cors');
 const knex = require('knex');
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
-const updateImageCount = require('./controllers/updateImageCount');
+const image = require('./controllers/image');
 const profileFetcher = require('./controllers/profileFetcher');
 
 const db = knex({
@@ -29,7 +29,8 @@ app.get('/', (req, res) => {
 
 app.post('/signin', signin.handleSignin(db, bcrypt));
 app.post('/register', register.handleRegister(db, bcrypt));
-app.put('/image', updateImageCount.handler(db));
+app.put('/image', image.handler(db));
+app.post('/imageurl', (req, res) => image.handleApiCall(req, res));
 app.get('/profile/:id', profileFetcher.handler(db));
 
 app.listen(3000, () => console.log('The server is listening on port 3000...'));
