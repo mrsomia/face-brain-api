@@ -8,7 +8,7 @@ const signin = require('./controllers/signin');
 const image = require('./controllers/image');
 const profileFetcher = require('./controllers/profileFetcher');
 const PORT = process.env.PORT || 7878;
-const DATABASE_URL = process.env.DATABASE_URL || '127.0.0.1'
+const DATABASE_URL = process.env.DATABASE_URL
 
 const db = knex({
 	client: 'pg',
