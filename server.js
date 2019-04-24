@@ -7,6 +7,7 @@ const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const image = require('./controllers/image');
 const profileFetcher = require('./controllers/profileFetcher');
+const PORT = process.env.PORT || 7878;
 
 const db = knex({
 	client: 'pg',
@@ -23,9 +24,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/', (req, res) => {
-	res.json('This is working');
-})
+app.get('/', (req, res) => res.json('This is working'))
 
 app.post('/signin', signin.handleSignin(db, bcrypt));
 app.post('/register', register.handleRegister(db, bcrypt));
@@ -33,4 +32,4 @@ app.put('/image', image.handler(db));
 app.post('/imageurl', (req, res) => image.handleApiCall(req, res));
 app.get('/profile/:id', profileFetcher.handler(db));
 
-app.listen(3000, () => console.log('The server is listening on port 3000...'));
+app.listen(PORT, () => console.log(`The server is listening on port ${PORT}...`));
