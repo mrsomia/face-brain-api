@@ -8,14 +8,13 @@ const signin = require('./controllers/signin');
 const image = require('./controllers/image');
 const profileFetcher = require('./controllers/profileFetcher');
 const PORT = process.env.PORT || 7878;
+const DATABASE_URL = process.env.DATABASE_URL || '127.0.0.1'
 
 const db = knex({
 	client: 'pg',
 	connection: {
-	  host : '127.0.0.1',
-	  user : 'sachinsomia',
-	  password : '',
-	  database : 'smart-brain'
+		connectionstring: DATABASE_URL,
+		ssl: true
 	}
   });
 
